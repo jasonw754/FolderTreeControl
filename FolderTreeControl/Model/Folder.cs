@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace GeekJ.FolderTreeControl.Model
 {
-    public class Folder : Node
+    public class Folder : FolderTreeItem
     {
         private System.IO.DirectoryInfo directoryInfo;
 

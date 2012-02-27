@@ -7,7 +7,7 @@ using System.IO;
 
 namespace GeekJ.FolderTreeControl.Model
 {
-    public class Drive : Node
+    public class Drive : FolderTreeItem
     {
         private DriveInfo _driveInfo;
         public DriveInfo DriveInfo

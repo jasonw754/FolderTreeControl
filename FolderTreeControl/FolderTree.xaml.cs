@@ -22,7 +22,7 @@ namespace GeekJ.FolderTreeControl
             InitializeComponent();
         }
 
-        private void FolderMultiSelect_Loaded(object sender, RoutedEventArgs e)
+        private void FolderTree_Loaded(object sender, RoutedEventArgs e)
         {
             // default the datacontext if it hasn't been set or isn't the expected type
             if (this.DataContext == null || !(this.DataContext is FolderTreeViewModel))
@@ -31,7 +31,7 @@ namespace GeekJ.FolderTreeControl
             }
         }
 
-        private void FolderMultiSelect_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void FolderTree_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (!(this.DataContext is FolderTreeViewModel))
             {
@@ -39,10 +39,10 @@ namespace GeekJ.FolderTreeControl
             }
         }
 
-        private void TreeView_Expanded(object sender, RoutedEventArgs e)
+        private void FolderTree_Expanded(object sender, RoutedEventArgs e)
         {
             var treeViewItem = (TreeViewItem)e.OriginalSource;
-            var node = (Node)treeViewItem.Header;
+            var node = (FolderTreeItem)treeViewItem.Header;
             node.LoadChildren();
         }
     }

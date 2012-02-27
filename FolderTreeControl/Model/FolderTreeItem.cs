@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GeekJ.FolderTreeControl.Model
 {
-    public abstract class Node : ViewModelBase
+    public abstract class FolderTreeItem : ViewModelBase
     {
         private bool _isExpanded;
         public bool IsExpanded
