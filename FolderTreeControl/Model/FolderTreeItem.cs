@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.ObjectModel;
 
 namespace GeekJ.FolderTreeControl.Model
 {
     public abstract class FolderTreeItem : ViewModelBase
     {
+
         private bool _isExpanded;
         public bool IsExpanded
         {
@@ -34,6 +36,37 @@ namespace GeekJ.FolderTreeControl.Model
                 OnPropertyChanged("IsSelected");
             }
         }
+
+        private bool? _isChecked = false;
+        public bool? IsChecked
+        {
+            get
+            {
+                return _isChecked;
+            }
+            set
+            {
+                _isChecked = value;
+                OnPropertyChanged("IsChecked");
+            }
+        }
+
+        private bool _isCheckedInherited = true;
+        public bool IsCheckedInherited 
+        { 
+            get 
+            { 
+                return _isCheckedInherited;
+            }
+            set
+            {
+                _isCheckedInherited = value;
+                OnPropertyChanged("IsCheckedInherited");
+            }
+        }
+
+        public abstract string Label { get; }
+        public abstract ObservableCollection<FolderTreeItem> Folders { get;}
 
         public abstract void LoadChildren();
     }

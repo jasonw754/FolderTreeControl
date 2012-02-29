@@ -20,24 +20,26 @@ namespace GeekJ.FolderTreeControl.Model
             this.directoryInfo = directoryInfo;
         }
 
-        private ObservableCollection<Folder> _folders;
-        public ObservableCollection<Folder> Folders
+        private ObservableCollection<FolderTreeItem> _folders;
+        public override ObservableCollection<FolderTreeItem> Folders
         {
             get
             {
                 if (_folders == null)
                 {
-                    _folders = new ObservableCollection<Folder>();
+                    _folders = new ObservableCollection<FolderTreeItem>();
                     _folders.Add(new Folder());
                 }
                 return _folders;
             }
         }
 
-        public string Label
+        public override string Label
         {
             get
             {
+                if (directoryInfo == null)
+                    return null;
                 return directoryInfo.Name;
             }
         }

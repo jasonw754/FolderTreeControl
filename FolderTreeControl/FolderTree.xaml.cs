@@ -45,5 +45,29 @@ namespace GeekJ.FolderTreeControl
             var node = (FolderTreeItem)treeViewItem.Header;
             node.LoadChildren();
         }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            var checkbox = (CheckBox)e.OriginalSource;
+            var treeViewItem = (TreeViewItem)checkbox.Tag;
+            var node = (FolderTreeItem)treeViewItem.Header;
+            var model = this.DataContext as FolderTreeViewModel;
+            if (!node.IsCheckedInherited)
+            {
+                model.Selection.Add(node);
+            }
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var checkbox = (CheckBox)e.OriginalSource;
+            var treeViewItem = (TreeViewItem)checkbox.Tag;
+            var node = (FolderTreeItem)treeViewItem.Header;
+            if (!node.IsCheckedInherited)
+            {
+                var model = this.DataContext as FolderTreeViewModel;
+                model.Selection.Add(node, false);
+            }
+        }
     }
 }

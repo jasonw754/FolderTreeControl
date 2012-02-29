@@ -61,8 +61,10 @@
   <ItemGroup>
     <Compile Include="Model\Drive.cs" />
     <Compile Include="Model\Folder.cs" />
+    <Compile Include="Model\FolderTreeSelection.cs" />
     <Compile Include="Model\FolderTreeViewModel.cs" />
     <Compile Include="Model\FolderTreeItem.cs" />
+    <Compile Include="Model\IsCheckedConverter.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

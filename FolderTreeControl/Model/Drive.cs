@@ -27,22 +27,24 @@ namespace GeekJ.FolderTreeControl.Model
             DriveInfo = driveInfo;
         }
 
-        public string Label
+        public override string Label
         {
             get
             {
+                if (DriveInfo == null)
+                    return null;
                 return DriveInfo.Name;
             }
         }
 
-        private ObservableCollection<Folder> _folders;
-        public ObservableCollection<Folder> Folders
+        private ObservableCollection<FolderTreeItem> _folders;
+        public override ObservableCollection<FolderTreeItem> Folders
         {
             get
             {
                 if (_folders == null)
                 {
-                    _folders = new ObservableCollection<Folder>();
+                    _folders = new ObservableCollection<FolderTreeItem>();
                     _folders.Add(new Folder());
                 }
                 return _folders;
