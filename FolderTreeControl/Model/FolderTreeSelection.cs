@@ -54,6 +54,29 @@ namespace GeekJ.FolderTreeControl.Model
             Console.WriteLine(items.Count());
         }
 
+        internal void ProcessParents(FolderTreeItem folderTreeItem)
+        {
+            if (folderTreeItem.Parent == null)
+                return;
+            bool indeterminate = false;
+            bool? current = folderTreeItem.IsChecked;
+            do
+            {
+                folderTreeItem = folderTreeItem.Parent;
+                if (indeterminate || folderTreeItem.Folders.Any(x => x.IsChecked != current))
+                {
+                    folderTreeItem.IsChecked = null;
+                    folderTreeItem.IsInDeterminate = true;
+                    indeterminate = true;
+                }
+                else
+                {
+                    folderTreeItem.IsChecked = current;
+                    folderTreeItem.IsInDeterminate = false;
+                }
+            } while (folderTreeItem.Parent != null);
+        }
+
         public class Item
         {
             public FolderTreeItem TreeItem { get; set; }

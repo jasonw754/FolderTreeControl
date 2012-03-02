@@ -53,7 +53,10 @@ namespace GeekJ.FolderTreeControl
             var node = (FolderTreeItem)treeViewItem.Header;
             var model = this.DataContext as FolderTreeViewModel;
             if (node.SelectionItem == null || !node.SelectionItem.Include)
+            {
                 model.Selection.Add(node);
+                model.Selection.ProcessParents(node);
+            }
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
@@ -62,8 +65,12 @@ namespace GeekJ.FolderTreeControl
             var treeViewItem = (TreeViewItem)checkbox.Tag;
             var node = (FolderTreeItem)treeViewItem.Header;
             var model = this.DataContext as FolderTreeViewModel;
-            if (node.SelectionItem != null && node.SelectionItem.Include)
+            if (node.IsInDeterminate || (node.SelectionItem != null && node.SelectionItem.Include))
+            {
+                node.IsInDeterminate = false;
                 model.Selection.Add(node, false);
+                model.Selection.ProcessParents(node);
+            }
         }
     }
 }

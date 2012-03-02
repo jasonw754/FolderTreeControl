@@ -60,6 +60,8 @@ namespace GeekJ.FolderTreeControl.Model
 
         internal FolderTreeSelection.Item SelectionItem { get; set; }
 
+        internal bool IsInDeterminate { get; set; }
+
         public abstract bool FoldersLoaded { get; set; }
     }
 }
