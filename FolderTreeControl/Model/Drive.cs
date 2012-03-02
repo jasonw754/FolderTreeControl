@@ -51,13 +51,30 @@ namespace GeekJ.FolderTreeControl.Model
             }
         }
 
+        public override bool FoldersLoaded { get; set; }
+
         public override void LoadChildren()
         {
             Folders.Clear();
             foreach (var child in Folder.LoadSubFolders(DriveInfo.RootDirectory))
             {
                 Folders.Add(child);
+                child.Parent = this;
+                child.SelectionItem = SelectionItem;
+                child.IsChecked = IsChecked;
             }
+            FoldersLoaded = true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Drive;
+            return (other != null && other.DriveInfo.Equals(DriveInfo));
+        }
+
+        public override int GetHashCode()
+        {
+            return DriveInfo.GetHashCode();
         }
     }
 }

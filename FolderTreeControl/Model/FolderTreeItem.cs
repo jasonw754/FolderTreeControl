@@ -51,23 +51,15 @@ namespace GeekJ.FolderTreeControl.Model
             }
         }
 
-        private bool _isCheckedInherited = true;
-        public bool IsCheckedInherited 
-        { 
-            get 
-            { 
-                return _isCheckedInherited;
-            }
-            set
-            {
-                _isCheckedInherited = value;
-                OnPropertyChanged("IsCheckedInherited");
-            }
-        }
-
         public abstract string Label { get; }
         public abstract ObservableCollection<FolderTreeItem> Folders { get;}
 
         public abstract void LoadChildren();
+
+        public FolderTreeItem Parent { get; set; }
+
+        internal FolderTreeSelection.Item SelectionItem { get; set; }
+
+        public abstract bool FoldersLoaded { get; set; }
     }
 }

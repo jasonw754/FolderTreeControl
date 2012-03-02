@@ -34,6 +34,8 @@ namespace GeekJ.FolderTreeControl.Model
             }
         }
 
+        public override bool FoldersLoaded { get; set; }
+
         public override string Label
         {
             get
@@ -50,12 +52,29 @@ namespace GeekJ.FolderTreeControl.Model
             foreach (var child in Folder.LoadSubFolders(directoryInfo))
             {
                 Folders.Add(child);
+                child.Parent = this;
+                child.SelectionItem = SelectionItem;
+                child.IsChecked = IsChecked;
             }
+            FoldersLoaded = true;
         }
 
         internal static IEnumerable<Folder> LoadSubFolders(System.IO.DirectoryInfo directoryInfo)
         {
             return directoryInfo.EnumerateDirectories().Select(x => new Folder(x));            
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Folder;
+            return (other != null 
+                && other.directoryInfo != null
+                && other.directoryInfo.Equals(directoryInfo));
+        }
+
+        public override int GetHashCode()
+        {
+            return directoryInfo.GetHashCode();
         }
     }
 }
