@@ -8,13 +8,27 @@
              d:DesignHeight="300" d:DesignWidth="300"
              Loaded="FolderTree_Loaded" DataContextChanged="FolderTree_DataContextChanged">
     <UserControl.Resources>
+        <model:IsCheckedConverter x:Key="isCheckedConverter" />
         <HierarchicalDataTemplate DataType="{x:Type model:Drive}" ItemsSource="{Binding Path=Folders}">
-            <CheckBox x:Name="selected" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding Path=IsChecked}" Tag="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}}"> 
+            <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Tag="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}}">
+                <CheckBox.IsChecked>
+                    <MultiBinding Converter="{StaticResource isCheckedConverter}">
+                        <Binding Path="IsChecked" />
+                        <Binding RelativeSource="{RelativeSource AncestorType=TreeViewItem}" Path="Header.IsCheckedInherited" />
+                    </MultiBinding>
+                </CheckBox.IsChecked>
                 <TextBlock Text="{Binding Path=Label}"/>
             </CheckBox>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type model:Folder}" ItemsSource="{Binding Path=Folders}">
-            <CheckBox x:Name="selected" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding Path=IsChecked}" Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TreeViewItem}}">
+            <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TreeViewItem}}">
+                <CheckBox.IsChecked>
+                    <MultiBinding Converter="{StaticResource isCheckedConverter}">
+                        <Binding Path="IsChecked" />
+                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=TreeViewItem}" Path="Header.IsCheckedInherited" />
+                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=TreeViewItem, AncestorLevel=2}" Path="Header.IsChecked" />
+                    </MultiBinding>
+                </CheckBox.IsChecked>
                 <TextBlock Text="{Binding Path=Label}"/>
             </CheckBox>
         </HierarchicalDataTemplate>
