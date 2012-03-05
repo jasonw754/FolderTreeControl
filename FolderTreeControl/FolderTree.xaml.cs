@@ -48,37 +48,28 @@ namespace GeekJ.FolderTreeControl
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            HandleCheckBox(sender, e);
+            var checkbox = (CheckBox)e.OriginalSource;
+            var treeViewItem = (TreeViewItem)checkbox.Tag;
+            var node = (FolderTreeItem)treeViewItem.Header;
+            var model = this.DataContext as FolderTreeViewModel;
+            if (node.SelectionItem == null || !node.SelectionItem.Include)
+            {
+                model.Selection.Add(node);
+                model.Selection.ProcessParents(node);
+            }
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            HandleCheckBox(sender, e);
-        }
-
-        private void HandleCheckBox(object sender, RoutedEventArgs e)
         {
             var checkbox = (CheckBox)e.OriginalSource;
             var treeViewItem = (TreeViewItem)checkbox.Tag;
             var node = (FolderTreeItem)treeViewItem.Header;
             var model = this.DataContext as FolderTreeViewModel;
-
-            if (checkbox.IsChecked.Value)
+            if (node.IsInDeterminate || (node.SelectionItem != null && node.SelectionItem.Include))
             {
-                if (node.SelectionItem == null || !node.SelectionItem.Include)
-                {
-                    model.Selection.Add(node);
-                    model.Selection.ProcessParents(node);
-                }
-            }
-            else
-            {
-                if (node.IsInDeterminate || (node.SelectionItem != null && node.SelectionItem.Include))
-                {
-                    node.IsInDeterminate = false;
-                    model.Selection.Add(node, false);
-                    model.Selection.ProcessParents(node);
-                }
+                node.IsInDeterminate = false;
+                model.Selection.Add(node, false);
+                model.Selection.ProcessParents(node);
             }
         }
     }
