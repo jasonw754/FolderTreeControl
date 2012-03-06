@@ -9,12 +9,12 @@
              Loaded="FolderTree_Loaded" DataContextChanged="FolderTree_DataContextChanged">
     <UserControl.Resources>
         <HierarchicalDataTemplate DataType="{x:Type model:Drive}" ItemsSource="{Binding Path=Folders}">
-            <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding Path=IsChecked}" Tag="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}}"> 
+            <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding Path=IsChecked}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeViewItem}}"> 
                 <TextBlock Text="{Binding Path=Label}"/>
             </CheckBox>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type model:Folder}" ItemsSource="{Binding Path=Folders}">
-            <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding Path=IsChecked}" Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TreeViewItem}}">
+            <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding Path=IsChecked}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeViewItem}}">
                 <TextBlock Text="{Binding Path=Label}"/>
             </CheckBox>
         </HierarchicalDataTemplate>
