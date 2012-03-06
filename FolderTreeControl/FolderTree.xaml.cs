@@ -63,23 +63,7 @@ namespace GeekJ.FolderTreeControl
             var node = (FolderTreeItem)treeViewItem.Header;
             var model = this.DataContext as FolderTreeViewModel;
 
-            if (checkbox.IsChecked.Value)
-            {
-                if (node.SelectionItem == null || !node.SelectionItem.Include)
-                {
-                    model.Selection.Add(node);
-                    model.Selection.ProcessParents(node);
-                }
-            }
-            else
-            {
-                if (node.IsInDeterminate || (node.SelectionItem != null && node.SelectionItem.Include))
-                {
-                    node.IsInDeterminate = false;
-                    model.Selection.Add(node, false);
-                    model.Selection.ProcessParents(node);
-                }
-            }
+            model.Selection.HandleCheckBox(node, checkbox.IsChecked);
         }
     }
 }

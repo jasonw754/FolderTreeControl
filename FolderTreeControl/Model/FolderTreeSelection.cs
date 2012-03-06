@@ -51,6 +51,8 @@ namespace GeekJ.FolderTreeControl.Model
                 }
             }
 
+            ProcessParents(folderTreeItem);
+
             Console.WriteLine(items.Count());
         }
 
@@ -66,15 +68,22 @@ namespace GeekJ.FolderTreeControl.Model
                 if (indeterminate || folderTreeItem.Folders.Any(x => x.IsChecked != current))
                 {
                     folderTreeItem.IsChecked = null;
-                    folderTreeItem.IsInDeterminate = true;
                     indeterminate = true;
                 }
                 else
                 {
                     folderTreeItem.IsChecked = current;
-                    folderTreeItem.IsInDeterminate = false;
                 }
             } while (folderTreeItem.Parent != null);
+        }
+
+        internal void HandleCheckBox(FolderTreeItem node, bool? isChecked)
+        {
+            // defend against the recursive calls
+            if (node.SelectionItem == null || node.SelectionItem.Include != isChecked.Value)
+            {
+                Add(node, isChecked.Value);
+            }
         }
 
         public class Item
