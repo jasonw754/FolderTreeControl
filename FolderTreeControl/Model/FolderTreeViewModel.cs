@@ -20,17 +20,6 @@ namespace GeekJ.FolderTreeControl.Model
             }
         }
 
-        private FolderTreeSelection _selection = new FolderTreeSelection();
-        public FolderTreeSelection Selection
-        {
-            get { return _selection; }
-            set
-            {
-                _selection = value;
-                OnPropertyChanged("Selection");
-            }
-        }
-
         public FolderTreeViewModel()
         {
             _drives = new ObservableCollection<Drive>();

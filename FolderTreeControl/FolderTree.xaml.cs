@@ -17,6 +17,16 @@ namespace GeekJ.FolderTreeControl
 {
     public partial class FolderTree : UserControl
     {
+        private FolderTreeSelection _selection = new FolderTreeSelection();
+        public FolderTreeSelection Selection
+        {
+            get { return _selection; }
+            set
+            {
+                _selection = value;
+            }
+        }
+
         public FolderTree()
         {
             InitializeComponent();
@@ -63,7 +73,7 @@ namespace GeekJ.FolderTreeControl
             var node = (FolderTreeItem)treeViewItem.Header;
             var model = this.DataContext as FolderTreeViewModel;
 
-            model.Selection.HandleCheckBox(node, checkbox.IsChecked);
+            Selection.HandleCheckBox(node, checkbox.IsChecked);
         }
     }
 }

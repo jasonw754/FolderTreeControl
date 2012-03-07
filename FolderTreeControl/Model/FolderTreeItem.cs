@@ -52,14 +52,66 @@ namespace GeekJ.FolderTreeControl.Model
         }
 
         public abstract string Label { get; }
-        public abstract ObservableCollection<FolderTreeItem> Folders { get;}
+
+        private static FolderTreeItem placeholder = new Placeholder();
+        private ObservableCollection<FolderTreeItem> _folders;
+        public ObservableCollection<FolderTreeItem> Folders
+        {
+            get
+            {
+                if (_folders == null)
+                {
+                    _folders = new ObservableCollection<FolderTreeItem>();
+                    _folders.Add(placeholder);
+                }
+                return _folders;
+            }
+        }
+
+        public FolderTreeItem Parent { get; set; }
+        public abstract bool FoldersLoaded { get; set; }
+
+        public FolderTreeItem() { }
+
+        public FolderTreeItem(FolderTreeItem parent)
+        {
+            if (parent != null)
+            {
+                Parent = parent;
+                SelectionItem = parent.SelectionItem;
+                IsChecked = parent.IsChecked;
+            }
+        }
+
 
         public abstract void LoadChildren();
 
-        public FolderTreeItem Parent { get; set; }
-
         internal FolderTreeSelection.Item SelectionItem { get; set; }
         
-        public abstract bool FoldersLoaded { get; set; }
+
+        public class Placeholder : FolderTreeItem
+        {
+            public override string Label
+            {
+                get { return null; }
+            }
+
+            public override void LoadChildren()
+            {
+                return;
+            }
+
+            public override bool FoldersLoaded
+            {
+                get
+                {
+                    return false;
+                }
+                set
+                {
+                    return;
+                }
+            }
+        }
     }
 }

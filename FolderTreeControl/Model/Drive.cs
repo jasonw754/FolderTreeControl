@@ -37,31 +37,14 @@ namespace GeekJ.FolderTreeControl.Model
             }
         }
 
-        private ObservableCollection<FolderTreeItem> _folders;
-        public override ObservableCollection<FolderTreeItem> Folders
-        {
-            get
-            {
-                if (_folders == null)
-                {
-                    _folders = new ObservableCollection<FolderTreeItem>();
-                    _folders.Add(new Folder());
-                }
-                return _folders;
-            }
-        }
-
         public override bool FoldersLoaded { get; set; }
 
         public override void LoadChildren()
         {
             Folders.Clear();
-            foreach (var child in Folder.LoadSubFolders(DriveInfo.RootDirectory))
+            foreach (var child in Folder.LoadSubFolders(DriveInfo.RootDirectory, this))
             {
                 Folders.Add(child);
-                child.Parent = this;
-                child.SelectionItem = SelectionItem;
-                child.IsChecked = IsChecked;
             }
             FoldersLoaded = true;
         }

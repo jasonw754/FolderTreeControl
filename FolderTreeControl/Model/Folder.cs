@@ -10,28 +10,10 @@ namespace GeekJ.FolderTreeControl.Model
     {
         private System.IO.DirectoryInfo directoryInfo;
 
-        public Folder()
-        {
-
-        }
-
-        public Folder(System.IO.DirectoryInfo directoryInfo)
+        public Folder(System.IO.DirectoryInfo directoryInfo, FolderTreeItem parent)
+            : base(parent)
         {
             this.directoryInfo = directoryInfo;
-        }
-
-        private ObservableCollection<FolderTreeItem> _folders;
-        public override ObservableCollection<FolderTreeItem> Folders
-        {
-            get
-            {
-                if (_folders == null)
-                {
-                    _folders = new ObservableCollection<FolderTreeItem>();
-                    _folders.Add(new Folder());
-                }
-                return _folders;
-            }
         }
 
         public override bool FoldersLoaded { get; set; }
@@ -49,19 +31,16 @@ namespace GeekJ.FolderTreeControl.Model
         public override void LoadChildren()
         {
             Folders.Clear();
-            foreach (var child in Folder.LoadSubFolders(directoryInfo))
+            foreach (var child in Folder.LoadSubFolders(directoryInfo, this))
             {
                 Folders.Add(child);
-                child.Parent = this;
-                child.SelectionItem = SelectionItem;
-                child.IsChecked = IsChecked;
             }
             FoldersLoaded = true;
         }
 
-        internal static IEnumerable<Folder> LoadSubFolders(System.IO.DirectoryInfo directoryInfo)
+        internal static IEnumerable<Folder> LoadSubFolders(System.IO.DirectoryInfo directoryInfo, FolderTreeItem parent)
         {
-            return directoryInfo.EnumerateDirectories().Select(x => new Folder(x));            
+            return directoryInfo.EnumerateDirectories().Select(x => new Folder(x, parent));            
         }
 
         public override bool Equals(object obj)

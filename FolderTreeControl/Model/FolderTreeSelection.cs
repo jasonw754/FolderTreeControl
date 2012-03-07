@@ -14,7 +14,7 @@ namespace GeekJ.FolderTreeControl.Model
         public void Add(FolderTreeItem folderTreeItem, bool include = true)
         {
             if (folderTreeItem.SelectionItem == null && include)
-            {                
+            {
                 folderTreeItem.SelectionItem = new Item() { TreeItem = folderTreeItem, Include = include };
                 items.Add(folderTreeItem.SelectionItem);
             }
@@ -56,7 +56,7 @@ namespace GeekJ.FolderTreeControl.Model
             Console.WriteLine(items.Count());
         }
 
-        internal void ProcessParents(FolderTreeItem folderTreeItem)
+        private void ProcessParents(FolderTreeItem folderTreeItem)
         {
             if (folderTreeItem.Parent == null)
                 return;
