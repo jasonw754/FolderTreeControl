@@ -7,8 +7,14 @@ using System.IO;
 
 namespace GeekJ.FolderTreeControl.Model
 {
+    /// <summary>
+    /// A folder tree item representing a logical drive on the local system.
+    /// </summary>
     public class Drive : FolderTreeItem
     {
+        /// <summary>
+        /// Information about the drive.
+        /// </summary>
         private DriveInfo _driveInfo;
         public DriveInfo DriveInfo
         {
@@ -26,18 +32,6 @@ namespace GeekJ.FolderTreeControl.Model
         {
             DriveInfo = driveInfo;
         }
-
-        public override string Label
-        {
-            get
-            {
-                if (DriveInfo == null)
-                    return null;
-                return DriveInfo.Name;
-            }
-        }
-
-        public override bool FoldersLoaded { get; set; }
 
         public override void LoadChildren()
         {

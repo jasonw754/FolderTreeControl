@@ -51,8 +51,6 @@ namespace GeekJ.FolderTreeControl.Model
             }
         }
 
-        public abstract string Label { get; }
-
         private static FolderTreeItem placeholder = new Placeholder();
         private ObservableCollection<FolderTreeItem> _folders;
         public ObservableCollection<FolderTreeItem> Folders
@@ -69,7 +67,8 @@ namespace GeekJ.FolderTreeControl.Model
         }
 
         public FolderTreeItem Parent { get; set; }
-        public abstract bool FoldersLoaded { get; set; }
+        
+        public bool FoldersLoaded { get; set; }
 
         public FolderTreeItem() { }
 
@@ -91,26 +90,9 @@ namespace GeekJ.FolderTreeControl.Model
 
         public class Placeholder : FolderTreeItem
         {
-            public override string Label
-            {
-                get { return null; }
-            }
-
             public override void LoadChildren()
             {
                 return;
-            }
-
-            public override bool FoldersLoaded
-            {
-                get
-                {
-                    return false;
-                }
-                set
-                {
-                    return;
-                }
             }
         }
     }

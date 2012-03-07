@@ -8,30 +8,29 @@ namespace GeekJ.FolderTreeControl.Model
 {
     public class Folder : FolderTreeItem
     {
-        private System.IO.DirectoryInfo directoryInfo;
+        private System.IO.DirectoryInfo _directoryInfo;
+        public System.IO.DirectoryInfo DirectoryInfo
+        {
+            get
+            {
+                return _directoryInfo;
+            }
+            set
+            {
+                _directoryInfo = value;
+            }
+        }
 
         public Folder(System.IO.DirectoryInfo directoryInfo, FolderTreeItem parent)
             : base(parent)
         {
-            this.directoryInfo = directoryInfo;
-        }
-
-        public override bool FoldersLoaded { get; set; }
-
-        public override string Label
-        {
-            get
-            {
-                if (directoryInfo == null)
-                    return null;
-                return directoryInfo.Name;
-            }
+            DirectoryInfo = directoryInfo;
         }
 
         public override void LoadChildren()
         {
             Folders.Clear();
-            foreach (var child in Folder.LoadSubFolders(directoryInfo, this))
+            foreach (var child in Folder.LoadSubFolders(DirectoryInfo, this))
             {
                 Folders.Add(child);
             }
@@ -47,13 +46,13 @@ namespace GeekJ.FolderTreeControl.Model
         {
             var other = obj as Folder;
             return (other != null 
-                && other.directoryInfo != null
-                && other.directoryInfo.Equals(directoryInfo));
+                && other.DirectoryInfo != null
+                && other.DirectoryInfo.Equals(DirectoryInfo));
         }
 
         public override int GetHashCode()
         {
-            return directoryInfo.GetHashCode();
+            return DirectoryInfo.GetHashCode();
         }
     }
 }
