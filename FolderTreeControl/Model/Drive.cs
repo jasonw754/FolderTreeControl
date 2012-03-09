@@ -12,10 +12,11 @@ namespace GeekJ.FolderTreeControl.Model
     /// </summary>
     public class Drive : FolderTreeItem
     {
+        private DriveInfo _driveInfo;
+        
         /// <summary>
         /// Information about the drive.
         /// </summary>
-        private DriveInfo _driveInfo;
         public DriveInfo DriveInfo
         {
             get
@@ -33,6 +34,9 @@ namespace GeekJ.FolderTreeControl.Model
             DriveInfo = driveInfo;
         }
 
+        /// <summary>
+        /// Loads subfolders for the drive tree item by loading subfolders of the drive's root directory.
+        /// </summary>
         public override void LoadChildren()
         {
             Folders.Clear();

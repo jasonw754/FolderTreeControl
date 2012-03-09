@@ -6,9 +6,16 @@ using System.Collections.ObjectModel;
 
 namespace GeekJ.FolderTreeControl.Model
 {
+    /// <summary>
+    /// A folder tree item representing a folder in the local filesystem.
+    /// </summary>
     public class Folder : FolderTreeItem
     {
         private System.IO.DirectoryInfo _directoryInfo;
+        
+        /// <summary>
+        /// Information about the folder.
+        /// </summary>
         public System.IO.DirectoryInfo DirectoryInfo
         {
             get
