@@ -47,6 +47,19 @@ namespace GeekJ.FolderTreeControl.Model
             FoldersLoaded = true;
         }
 
+        public override DirectoryInfo DirectoryInfo
+        {
+            get { return DriveInfo.RootDirectory; }
+        }
+
+        public override string Path
+        {
+            get 
+            {
+                return DirectoryInfo.FullName;
+            }
+        }
+
         public override bool Equals(object obj)
         {
             var other = obj as Drive;

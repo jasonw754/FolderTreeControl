@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace GeekJ.FolderTreeControl.Model
 {
@@ -51,6 +52,9 @@ namespace GeekJ.FolderTreeControl.Model
             }
         }
 
+        public abstract string Path { get; }
+        public abstract DirectoryInfo DirectoryInfo { get; }
+
         private static FolderTreeItem placeholder = new Placeholder();
         private ObservableCollection<FolderTreeItem> _folders;
         public ObservableCollection<FolderTreeItem> Folders
@@ -93,6 +97,16 @@ namespace GeekJ.FolderTreeControl.Model
             public override void LoadChildren()
             {
                 return;
+            }
+
+            public override DirectoryInfo DirectoryInfo
+            {
+                get { return null; }
+            }
+
+            public override string Path
+            {
+                get { return string.Empty; }
             }
         }
     }

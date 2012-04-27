@@ -16,22 +16,18 @@ namespace GeekJ.FolderTreeControl.Model
         /// <summary>
         /// Information about the folder.
         /// </summary>
-        public System.IO.DirectoryInfo DirectoryInfo
+        public override System.IO.DirectoryInfo DirectoryInfo
         {
             get
             {
                 return _directoryInfo;
-            }
-            set
-            {
-                _directoryInfo = value;
             }
         }
 
         public Folder(System.IO.DirectoryInfo directoryInfo, FolderTreeItem parent)
             : base(parent)
         {
-            DirectoryInfo = directoryInfo;
+           _directoryInfo = directoryInfo;
         }
 
         public override void LoadChildren()
@@ -48,6 +44,11 @@ namespace GeekJ.FolderTreeControl.Model
         {
             return directoryInfo.EnumerateDirectories().Select(x => new Folder(x, parent));            
         }
+
+        public override string Path
+        {
+            get { return DirectoryInfo.FullName; }
+        }
 
         public override bool Equals(object obj)
         {

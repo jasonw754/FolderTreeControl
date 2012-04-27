@@ -2,24 +2,59 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace GeekJ.FolderTreeControl.Model
 {
     public class FolderTreeSelection : ViewModelBase
     {
-        private List<Item> items = new List<Item>();
+        private SortedList<string, Item> items = new SortedList<string, Item>();
 
         public event EventHandler Changed;
 
         public FolderTreeSelection() { }
 
-        public void Add(FolderTreeItem folderTreeItem, bool include = true)
+        public IEnumerable<DirectoryInfo> SelectedFolders
+        {
+            get
+            {
+                if (items.Count() > 0)
+                {
+                    foreach (var dir in items.Where(x => x.Value.Include).Select(x => x.Value.TreeItem.DirectoryInfo))
+                    {
+                        yield return dir;
+                        foreach (var subDir in EnumerateSelectedSubFolders(dir))
+                        {
+                            yield return subDir;
+                        }
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<DirectoryInfo> EnumerateSelectedSubFolders(DirectoryInfo directoryInfo)
+        {
+            foreach (var subDir in directoryInfo.EnumerateDirectories())
+            {
+                if (items.ContainsKey(subDir.FullName) && !items[subDir.FullName].Include)
+                {
+                    continue;
+                }
+                yield return subDir;
+                foreach (var recursion in EnumerateSelectedSubFolders(subDir))
+                {
+                    yield return recursion;
+                }
+            }
+        }
+
+        internal void Add(FolderTreeItem folderTreeItem, bool include = true)
         {
             if (folderTreeItem.SelectionItem == null && include)
             {
                 // node is checked for the first time, add a selection item
                 folderTreeItem.SelectionItem = new Item() { TreeItem = folderTreeItem, Include = include };
-                items.Add(folderTreeItem.SelectionItem);
+                items.Add(folderTreeItem.Path, folderTreeItem.SelectionItem);
 
                 OnChanged();
             }
@@ -29,13 +64,13 @@ namespace GeekJ.FolderTreeControl.Model
                 if (!include && (folderTreeItem.Parent == null || folderTreeItem.Parent.SelectionItem == null))
                 {
                     // special behavior if root node is unchecked
-                    items.RemoveAll(x => x.TreeItem.Equals(folderTreeItem));
+                    items.Remove(folderTreeItem.Path);
                     folderTreeItem.SelectionItem = null;
                 }
                 else
                 {
                     // determine if this node itself was specifically checked/unchecked
-                    var match = items.Where(x => x.TreeItem.Equals(folderTreeItem)).SingleOrDefault();
+                    var match = items.Where(x => x.Key.Equals(folderTreeItem.Path)).SingleOrDefault().Value;
                     if (match != null)
                     {
                         // if so, adjust it's state
@@ -45,7 +80,7 @@ namespace GeekJ.FolderTreeControl.Model
                     {
                         // if not, add a new selection item
                         folderTreeItem.SelectionItem = new Item() { TreeItem = folderTreeItem, Include = include };
-                        items.Add(folderTreeItem.SelectionItem);
+                        items.Add(folderTreeItem.Path, folderTreeItem.SelectionItem);
                     }
                 }
                 OnChanged();
@@ -57,7 +92,7 @@ namespace GeekJ.FolderTreeControl.Model
                 foreach (var childItem in folderTreeItem.Folders)
                 {
                     // all children node states should be wiped out and given a reference to this nodes state
-                    items.RemoveAll(x => x.TreeItem.Equals(childItem));
+                    items.Remove(childItem.Path);
                     childItem.SelectionItem = folderTreeItem.SelectionItem;
                     childItem.IsChecked = include;
 
