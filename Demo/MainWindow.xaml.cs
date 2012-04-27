@@ -23,5 +23,9 @@ namespace Demo
         {
             InitializeComponent();
         }
+
+        private void FolderTreeSelection_Changed(object sender, EventArgs e)
+        {
+        }
     }
 }

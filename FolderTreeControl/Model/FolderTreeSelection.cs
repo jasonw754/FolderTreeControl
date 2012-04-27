@@ -9,6 +9,8 @@ namespace GeekJ.FolderTreeControl.Model
     {
         private List<Item> items = new List<Item>();
 
+        public event EventHandler Changed;
+
         public FolderTreeSelection() { }
 
         public void Add(FolderTreeItem folderTreeItem, bool include = true)
@@ -18,6 +20,8 @@ namespace GeekJ.FolderTreeControl.Model
                 // node is checked for the first time, add a selection item
                 folderTreeItem.SelectionItem = new Item() { TreeItem = folderTreeItem, Include = include };
                 items.Add(folderTreeItem.SelectionItem);
+
+                OnChanged();
             }
             else if (folderTreeItem.SelectionItem != null && folderTreeItem.SelectionItem.Include != include)
             {
@@ -44,6 +48,7 @@ namespace GeekJ.FolderTreeControl.Model
                         items.Add(folderTreeItem.SelectionItem);
                     }
                 }
+                OnChanged();
             }
 
             // process children nodes if any are loaded
@@ -97,6 +102,14 @@ namespace GeekJ.FolderTreeControl.Model
             if (node.SelectionItem == null || node.SelectionItem.Include != isChecked.Value)
             {
                 Add(node, isChecked.Value);
+            }
+        }
+
+        private void OnChanged()
+        {
+            if (Changed != null)
+            {
+                Changed(this, new EventArgs());
             }
         }
 

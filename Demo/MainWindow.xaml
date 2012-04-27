@@ -4,6 +4,6 @@
         xmlns:ftc="clr-namespace:GeekJ.FolderTreeControl;assembly=GeekJ.FolderTreeControl"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <ftc:FolderTree />
+        <ftc:FolderTree SelectionChanged="FolderTreeSelection_Changed" />
     </Grid>
 </Window>
