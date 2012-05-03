@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace GeekJ.FolderTreeControl.Model
 {
@@ -42,7 +43,18 @@ namespace GeekJ.FolderTreeControl.Model
 
         internal static IEnumerable<Folder> LoadSubFolders(System.IO.DirectoryInfo directoryInfo, FolderTreeItem parent)
         {
-            return directoryInfo.EnumerateDirectories().Select(x => new Folder(x, parent));            
+            try
+            {
+                return directoryInfo.EnumerateDirectories().Select(x => new Folder(x, parent));
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return Enumerable.Empty<Folder>();
+            }
+            catch (IOException e)
+            {
+                return Enumerable.Empty<Folder>();
+            }
         }
 
         public override string Path

@@ -9,10 +9,18 @@ namespace GeekJ.FolderTreeControl.Model
     public class FolderTreeSelection : ViewModelBase
     {
         private SortedList<string, Item> items = new SortedList<string, Item>();
+        private Dictionary<Item, long> itemCounts = new Dictionary<Item, long>(); 
 
         public event EventHandler Changed;
 
         public FolderTreeSelection() { }
+
+        public long FolderCount {
+            get
+            {
+                return itemCounts.Sum(x => x.Value);
+            }
+        }
 
         public IEnumerable<DirectoryInfo> SelectedFolders
         {
@@ -20,12 +28,16 @@ namespace GeekJ.FolderTreeControl.Model
             {
                 if (items.Count() > 0)
                 {
-                    foreach (var dir in items.Where(x => x.Value.Include).Select(x => x.Value.TreeItem.DirectoryInfo))
+                    foreach (var dir in items.Where(x => x.Value.Include).Select(x => x.Value))
                     {
-                        yield return dir;
-                        foreach (var subDir in EnumerateSelectedSubFolders(dir))
+                        yield return dir.TreeItem.DirectoryInfo;
+                        itemCounts[dir] = 1;
+                        OnPropertyChanged("FolderCount");
+                        foreach (var subDir in EnumerateSelectedSubFolders(dir.TreeItem.DirectoryInfo))
                         {
                             yield return subDir;
+                            itemCounts[dir]++;
+                            OnPropertyChanged("FolderCount");
                         }
                     }
                 }
@@ -34,7 +46,21 @@ namespace GeekJ.FolderTreeControl.Model
 
         private IEnumerable<DirectoryInfo> EnumerateSelectedSubFolders(DirectoryInfo directoryInfo)
         {
-            foreach (var subDir in directoryInfo.EnumerateDirectories())
+            IEnumerable<DirectoryInfo> subDirs;
+            try
+            {
+                subDirs = directoryInfo.EnumerateDirectories();
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                subDirs = Enumerable.Empty<DirectoryInfo>();
+            }
+            catch (IOException e)
+            {
+                subDirs = Enumerable.Empty<DirectoryInfo>();
+            }
+
+            foreach (var subDir in subDirs)
             {
                 if (items.ContainsKey(subDir.FullName) && !items[subDir.FullName].Include)
                 {
@@ -65,6 +91,8 @@ namespace GeekJ.FolderTreeControl.Model
                 {
                     // special behavior if root node is unchecked
                     items.Remove(folderTreeItem.Path);
+                    itemCounts.Remove(folderTreeItem.SelectionItem);
+                    OnPropertyChanged("FolderCount");
                     folderTreeItem.SelectionItem = null;
                 }
                 else
@@ -75,6 +103,11 @@ namespace GeekJ.FolderTreeControl.Model
                     {
                         // if so, adjust it's state
                         match.Include = include;
+                        if (!match.Include)
+                        {
+                            itemCounts.Remove(match);
+                            OnPropertyChanged("FolderCount");
+                        }
                     }
                     else
                     {
@@ -92,7 +125,10 @@ namespace GeekJ.FolderTreeControl.Model
                 foreach (var childItem in folderTreeItem.Folders)
                 {
                     // all children node states should be wiped out and given a reference to this nodes state
-                    items.Remove(childItem.Path);
+                    if (items.Remove(childItem.Path))
+                    {
+                        OnChanged();
+                    }
                     childItem.SelectionItem = folderTreeItem.SelectionItem;
                     childItem.IsChecked = include;
 
@@ -142,6 +178,7 @@ namespace GeekJ.FolderTreeControl.Model
 
         private void OnChanged()
         {
+            OnPropertyChanged("SelectedFolders");
             if (Changed != null)
             {
                 Changed(this, new EventArgs());

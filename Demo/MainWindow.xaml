@@ -3,7 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ftc="clr-namespace:GeekJ.FolderTreeControl;assembly=GeekJ.FolderTreeControl"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <ftc:FolderTree SelectionChanged="FolderTreeSelection_Changed" />
-    </Grid>
+    <DockPanel LastChildFill="True">
+        <StatusBar DockPanel.Dock="Bottom" HorizontalContentAlignment="Stretch">
+            <StatusBarItem Width="Auto">
+                <TextBlock x:Name="status" />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock x:Name="folderCount" Text="{Binding ElementName=folderTree, Path=Selection.FolderCount}" />
+            </StatusBarItem>
+        </StatusBar>
+        <Grid>
+            <ftc:FolderTree x:Name="folderTree" SelectionChanged="FolderTreeSelection_Changed" />
+        </Grid>
+    </DockPanel>
 </Window>
